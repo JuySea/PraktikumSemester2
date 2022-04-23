@@ -1,4 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
 
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="../../plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="adminlte.min.css">
+  <!-- style -->
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -74,7 +100,7 @@
                         </div>
                     </div>
                     <br>
-                    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                    <button name="submit" type="submit" class="btn btn-primary" value="notnull">Submit</button>
 
                 </div>
                 </form>
@@ -87,15 +113,15 @@
                     require_once 'pasien.php';
                     require_once 'bmipasien.php';
 
-                    $pasien1 = new Pasien("2022-03-30","Abdul","Jakarta","4 April","Laki-laki","abduladul@gmail.com");
+                    $pasien1 = new Pasien("2022-03-30","P001","Abdul","Jakarta","4 April","Laki-laki","abduladul@gmail.com");
                     $bmi1 = new BMI(192,120);
                     $BMIpasien1 = new BMIpasien($pasien1,$bmi1);
 
-                    $pasien2 = new Pasien("2022-04-01","Loki","Asgard","2 Juni","Laki-laki","loki@avengers.com");
+                    $pasien2 = new Pasien("2022-04-01","P002","Loki","Asgard","2 Juni","Laki-laki","loki@avengers.com");
                     $bmi2 = new BMI(176,70);
                     $BMIpasien2 = new BMIpasien($pasien2,$bmi2);
 
-                    $pasien3 = new Pasien("2022-04-05","Vika","Sevastopol","1 Agustus","Perempuan","vladimirvika@gmail.com");
+                    $pasien3 = new Pasien("2022-04-05","P003","Vika","Sevastopol","1 Agustus","Perempuan","vladimirvika@gmail.com");
                     $bmi3 = new BMI(162,40);
                     $BMIpasien3 = new BMIpasien($pasien3,$bmi3);
 
@@ -106,17 +132,45 @@
                     $tinggi = $_GET["tinggi"];
                     $tgl_lahir = $_GET["tgl_lahir"];
                     $tmp_lahir = $_GET["tmp_lahir"];
-                    $gender = $_GET["gender"];          
+                    $gender = $_GET["gender"];  
+                    $notnull = $_GET["submit"];     
+                    $bmi = $berat / (($tinggi / 100 ) * ($tinggi / 100 ));
+   
 
-                    $pasien4 = new Pasien($tgl_periksa, $nama, $tmp_lahir, $tgl_lahir, $gender, $email);
+                    $pasien4 = new Pasien($tgl_periksa, "P004", $nama, $tmp_lahir, $tgl_lahir, $gender, $email);
                     $bmi4 = new BMI($tinggi, $berat);
                     $BMIpasien4 = new BMIpasien($pasien4, $bmi4);
 
                     $ar_pasien = [$BMIpasien1, $BMIpasien2, $BMIpasien3, $BMIpasien4];
+
+                    if ($bmi < 18.5) {
+                        echo "<h1 style='margin-left:20rem;margin-bottom:5px;font-family:san-serif;'> Kekurangan berat badan </h1><br>
+                        <img style='margin-left:25rem;margin-bottom:20px;' src='option1.png'>
+                        <br>
+                        <h5 style='margin-left:17rem;margin-bottom:40px;font-family:san-serif;'> Perlu menambah asupan tubuh dengan makanan yang bergizi. </h5>
+                        ";        
+                    } elseif ($bmi >= 18.5 && $bmi <= 24.9) {
+                        echo "<h1 style='margin-left:20rem;margin-bottom:5px;font-family:san-serif;'> Berat badan kamu ideal </h1><br>
+                        <img style='margin-left:25rem;margin-bottom:20px;' src='option2.png'>
+                        <br>
+                        <h5 style='margin-left:19rem;margin-bottom:40px;font-family:san-serif;'> Tetap jaga pola makan dan jangan lupa berolahraga. </h5>
+                        ";
+                    } elseif ($bmi >= 25 && $bmi <= 29.9) {
+                        echo "<h1 style='margin-left:20rem;margin-bottom:5px;font-family:san-serif;'> Kelebihan berat badan </h1><br>
+                        <img style='margin-left:25rem;margin-bottom:20px;' src='option3.png'>
+                        <br>
+                        <h5 style='margin-left:18rem;margin-bottom:40px;font-family:san-serif;'> Perlu mengurangi porsi makan dan rajin berolahraga </h5>
+                        ";                    
+                    } else {
+                        echo "<h1 style='margin-left:20rem;margin-bottom:5px;font-family:san-serif;'> Mengalami kegemukan </h1><br>
+                        <img style='margin-left:25rem;margin-bottom:20px;' src='option4.png'>
+                        <br>
+                        <h5 style='margin-left:18rem;margin-bottom:40px;font-family:san-serif;'> Kesehatan anda terancam, segera pergi menemui dokter. </h5>
+                        ";                     
+                    }
                     ?>
 
-                    
-                    <table width="100%" border="1">
+<table width="100%" border="1">
                         <thead>
                             <tr>
                                 <th>Nomor</th>
@@ -138,8 +192,8 @@
                                     <tr>
                                         <td>{$nomor}</td>
                                         <td>{$pas->pasien->tgl_periksa}</td>
+                                        <td>{$pas->pasien->kode}</td>
                                         <td>{$pas->pasien->nama}</td>
-                                        <td> ASDAD </td>
                                         <td>{$pas->pasien->gender}</td>
                                         <td>{$pas->bmi->berat}</td>
                                         <td>{$pas->bmi->tinggi}</td>
@@ -157,50 +211,6 @@
         </section>
 
     </div>
-    <!-- /.content-wrapper -->
-  
 
-
-
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="../../plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-  $(function () {
-    //Datemask dd/mm/yyyy
-    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-    //Datemask2 mm/dd/yyyy
-    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-  })
-</script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="../../plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="../../plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="../../plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="../../plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="../../plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="../../plugins/moment/moment.min.js"></script>
-<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="../../plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="../../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="../../dist/js/pages/dashboard.js"></script>
 </body>
 </html>
